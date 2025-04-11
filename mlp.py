@@ -349,7 +349,14 @@ class FunctionWithDerivative():
                 jacobian = np.outer(s, 1 - s) - np.outer(s, np.ones_like(s)) + np.diag(s)# The softmax Jacobian
                 return jacobian
             self.derivative_input = softmax_jacobian_input
-        activations_dict = {"identity" : identity_init, "relu" : relu_init, "soft_relu" : soft_relu_init, "sigmoid" : sigmoid_init, "softmax" : softmax_init}
+        def arctan_init(self):
+            def arctan(x):
+                return np.arctan(x)
+            self.function = np.vectorize(arctan)
+            def arctan_derivative(x):
+                return np.cos(x)**2
+            self.derivative = np.vectorize(arctan_derivative)
+        activations_dict = {"identity" : identity_init, "relu" : relu_init, "soft_relu" : soft_relu_init, "sigmoid" : sigmoid_init, "softmax" : softmax_init, "arctan" : arctan_init}
         activations_dict[name](self)
 
 
